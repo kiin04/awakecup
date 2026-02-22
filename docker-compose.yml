@@ -17,6 +17,8 @@ services:
 
   backend:
     image: ${DOCKER_HUB_USER}/awakecup-backend:latest
+    ports:
+      - "5000:80"
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;
     depends_on:
@@ -27,7 +29,7 @@ services:
   admin-ui:
     image: ${DOCKER_HUB_USER}/awakecup-admin:latest
     ports:
-      - "5000:80"
+      - "3000:80"
     networks:
       - awakecup-network
 
