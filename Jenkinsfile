@@ -40,19 +40,20 @@ pipeline {
         }
 
         stage('Init MySQL Database') {
-    steps {
-        script {
-            echo "Waiting for MySQL to start..."
-            sh "sleep 20" 
-            
-            sh """
-                docker exec -i awakecup-db mysql -u root -pYourPassword123 -e "CREATE DATABASE IF NOT EXISTS awakecup;"
-                docker exec -i awakecup-db mysql -u root -pYourPassword123 awakecup < './database/table_data.sql'
-                docker exec -i awakecup-db mysql -u root -pYourPassword123 awakecup < './database/procedure_function.sql'
-            """
+            steps {
+                script {
+                    echo "Waiting for MySQL to start..."
+                    sh "sleep 20" 
+                    
+                    sh """
+                        docker exec -i awakecup-db mysql -u root -pYourPassword123 -e "SET GLOBAL sql_mode = ''; CREATE DATABASE IF NOT EXISTS awakecup;"
+                        docker exec -i awakecup-db mysql -u root -pYourPassword123 awakecup < './database/table_data.sql'
+                        docker exec -i awakecup-db mysql -u root -pYourPassword123 awakecup < './database/procedure_function.sql'
+                    """
+                }
+            }
         }
     }
-}
     post {
         always {
             sh "docker image prune -f"
