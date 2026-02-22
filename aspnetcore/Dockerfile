@@ -2,9 +2,8 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 
 WORKDIR /app
-COPY *.sln ./
 COPY aspnetcore/*.csproj ./aspnetcore/
-RUN dotnet restore ./aspnetcore/YourProjectName.csproj
+RUN dotnet restore ./aspnetcore/aspnetcore.csproj
 
 COPY . .
 WORKDIR /app/aspnetcore
