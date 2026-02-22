@@ -10,15 +10,12 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      # Tự động chạy các script SQL khi khởi tạo
       - ./database:/docker-entrypoint-initdb.d
     networks:
       - awakecup-network
 
   backend:
-    build:
-      context: .
-      dockerfile: aspnetcore/Dockerfile
+    image: kiin04/awakecup-backend:latest
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;
     depends_on:
@@ -27,14 +24,14 @@ services:
       - awakecup-network
 
   admin-ui:
-    build: ./admin-react
+    image: kiin04/awakecup-admin:latest
     ports:
       - "3000:80"
     networks:
       - awakecup-network
 
   store-ui:
-    build: ./store-react
+    image: kiin04/awakecup-store:latest
     ports:
       - "3001:80"
     networks:
