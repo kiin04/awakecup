@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: awakecup
+      MYSQL_ROOT_PASSWORD: YourPassword123
+    ports:
+      - "3306:3306"
+    volumes:
+      # Tự động chạy các script SQL khi khởi tạo
+      - ./database:/docker-entrypoint-initdb.d
+    networks:
+      - awakecup-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: aspnetcore/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;
+    depends_on:
+      - db
+    networks:
+      - awakecup-network
+
+  admin-ui:
+    build: ./admin-react
+    ports:
+      - "3000:80"
+    networks:
+      - awakecup-network
+
+  store-ui:
+    build: ./store-react
+    ports:
+      - "3001:80"
+    networks:
+      - awakecup-network
+
+networks:
+  awakecup-network:
+    driver: bridge
