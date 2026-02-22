@@ -15,7 +15,7 @@ services:
       - awakecup-network
 
   backend:
-    image: kiin04/awakecup-backend:latest
+    image: ${DOCKER_HUB_USER}/awakecup-backend:latest
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;
     depends_on:
@@ -24,14 +24,14 @@ services:
       - awakecup-network
 
   admin-ui:
-    image: kiin04/awakecup-admin:latest
+    image: ${DOCKER_HUB_USER}/awakecup-admin:latest
     ports:
       - "3000:80"
     networks:
       - awakecup-network
 
   store-ui:
-    image: kiin04/awakecup-store:latest
+    image: ${DOCKER_HUB_USER}/awakecup-store:latest
     ports:
       - "3001:80"
     networks:
