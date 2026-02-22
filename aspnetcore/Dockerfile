@@ -16,4 +16,4 @@ WORKDIR /app
 COPY --from=build /app/aspnetcore/out .
 
 EXPOSE 80
-ENTRYPOINT ["dotnet", "awakecup.dll"]
+ENTRYPOINT ["dotnet", "aspnetcore.dll"]
