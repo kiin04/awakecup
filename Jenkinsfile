@@ -46,9 +46,9 @@ pipeline {
                     sh "sleep 20" 
                     
                     sh """
-                        docker exec -i awakecup-db mysql -u root -p'YourPassword123' -e "CREATE DATABASE IF NOT EXISTS awakecup;"
-                        docker exec -i awakecup-db mysql -u root -p'YourPassword123' awakecup < ./database/table&data.sql
-                        docker exec -i awakecup-db mysql -u root -p'YourPassword123' awakecup < ./database/procedure&function.sql
+                        docker exec -i awakecup-db mysql -u root -pYourPassword123 -e "CREATE DATABASE IF NOT EXISTS awakecup;"
+                        docker exec -i awakecup-db mysql -u root -pYourPassword123 awakecup < './database/table&data.sql'
+                        docker exec -i awakecup-db mysql -u root -pYourPassword123 awakecup < './database/procedure&function.sql'
                     """
                 }
             }
