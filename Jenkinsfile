@@ -5,43 +5,60 @@ pipeline {
         REGISTRY_CREDS  = "dockerhub-pass"
     }
     stages {
-        stage('Checkout') {
-            steps { checkout scm }
+        stage('Checkout Source') {
+            steps {
+                checkout scm
+            }
         }
 
-       
-}stage('Build & Push to Docker Hub') {
+        stage('Build & Push Images') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDS) {
+                    withCredentials([usernamePassword(credentialsId: REGISTRY_CREDS, passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh "echo \$PASS | docker login -u \$USER --password-stdin"
                         
-                        def backendImage = docker.build("${DOCKER_HUB_USER}/awakecup-backend:latest", "-f aspnetcore/Dockerfile .")
-                        backendImage.push()
+                        
+                        sh "docker build -t ${DOCKER_HUB_USER}/awakecup-backend:latest -f aspnetcore/Dockerfile ."
+                        sh "docker push ${DOCKER_HUB_USER}/awakecup-backend:latest"
 
                         
-                        def adminImage = docker.build("${DOCKER_HUB_USER}/awakecup-admin:latest", "./admin-react")
-                        adminImage.push()
+                        sh "docker build -t ${DOCKER_HUB_USER}/awakecup-admin:latest ./admin-react"
+                        sh "docker push ${DOCKER_HUB_USER}/awakecup-admin:latest"
 
                         
-                        def storeImage = docker.build("${DOCKER_HUB_USER}/awakecup-store:latest", "./store-react")
-                        storeImage.push()
+                        sh "docker build -t ${DOCKER_HUB_USER}/awakecup-store:latest ./store-react"
+                        sh "docker push ${DOCKER_HUB_USER}/awakecup-store:latest"
                     }
                 }
             }
         }
 
-        stage('Deploy on EC2') {
+        stage('Deploy with Compose') {
             steps {
-                
-                sh "DOCKER_HUB_USER=${DOCKER_HUB_USER} docker-compose pull"
-                sh "DOCKER_HUB_USER=${DOCKER_HUB_USER} docker-compose up -d"
+        
+                sh "DOCKER_HUB_USER=${DOCKER_HUB_USER} docker-compose down || true"
+                sh "DOCKER_HUB_USER=${DOCKER_HUB_USER} docker-compose up -d --force-recreate"
+            }
+        }
+
+        stage('Init MySQL Database') {
+            steps {
+                script {
+                    echo "Waiting for MySQL to start..."
+                    sh "sleep 20" 
+                    
+                    sh """
+                        docker exec -i awakecup-db mysql -u root -p'YourPassword123' -e "CREATE DATABASE IF NOT EXISTS awakecup;"
+                        docker exec -i awakecup-db mysql -u root -p'YourPassword123' awakecup < ./database/table&data.sql
+                        docker exec -i awakecup-db mysql -u root -p'YourPassword123' awakecup < ./database/procedure&function.sql
+                    """
+                }
             }
         }
     }
     post {
         always {
-            
-            sh 'docker image prune -f'
+            sh "docker image prune -f"
         }
     }
 }
