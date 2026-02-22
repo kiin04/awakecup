@@ -12,26 +12,24 @@ pipeline {
         }
 
         stage('Build & Push Images') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: REGISTRY_CREDS, passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "echo \$PASS | docker login -u \$USER --password-stdin"
-                        
-                        
-                        sh "docker build -t ${DOCKER_HUB_USER}/awakecup-backend:latest -f aspnetcore/Dockerfile ."
-                        sh "docker push ${DOCKER_HUB_USER}/awakecup-backend:latest"
-
-                        
-                        sh "docker build -t ${DOCKER_HUB_USER}/awakecup-admin:latest ./admin-react"
-                        sh "docker push ${DOCKER_HUB_USER}/awakecup-admin:latest"
-
-                        
-                        sh "docker build -t ${DOCKER_HUB_USER}/awakecup-store:latest ./store-react"
-                        sh "docker push ${DOCKER_HUB_USER}/awakecup-store:latest"
-                    }
-                }
+    steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub-pass', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                sh "echo \$PASS | docker login -u \$USER --password-stdin"
+                
+                
+                sh "docker build -t thainv28/awakecup-backend:latest -f aspnetcore/Dockerfile ."
+                sh "docker build -t thainv28/awakecup-admin:latest ./admin-react"
+                sh "docker build -t thainv28/awakecup-store:latest ./store-react"
+                
+                
+                sh "docker push thainv28/awakecup-backend:latest"
+                sh "docker push thainv28/awakecup-admin:latest"
+                sh "docker push thainv28/awakecup-store:latest"
             }
         }
+    }
+}
 
         stage('Deploy with Compose') {
             steps {
