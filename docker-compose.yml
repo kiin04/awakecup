@@ -27,7 +27,7 @@ services:
   admin-ui:
     image: ${DOCKER_HUB_USER}/awakecup-admin:latest
     ports:
-      - "3000:80"
+      - "5000:80"
     networks:
       - awakecup-network
 
