@@ -123,33 +123,28 @@ namespace aspnetcore
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Use wwwroot folder public on web
             app.UseStaticFiles();
-            // Use Cors with origin in appsetting.json
-            app.UseCors("OnlyOwnClientOrigin");
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
+
+
             app.UseSwagger();
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Web store ASP.NET Web APIs");
-                options.RoutePrefix = string.Empty;
-            });
+            app.UseSwaggerUI(options => { ... });
+
             if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+         {
+            app.UseDeveloperExceptionPage();
+         }
 
             app.UseRouting();
+
+            app.UseCors("OnlyOwnClientOrigin"); 
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+         {
+            endpoints.MapControllers();
+           });
         }
     }
 }
