@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     container_name: awakecup-db
     restart: always
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -18,6 +18,7 @@ services:
 
   backend:
     image: ${DOCKER_HUB_USER}/awakecup-backend:latest
+    container_name: awakecup-backend-1
     ports:
       - "5000:5000"
     volumes:
