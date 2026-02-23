@@ -22,6 +22,7 @@ services:
     environment:
       - App__ConnectionString=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;
       - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - db
     networks:
