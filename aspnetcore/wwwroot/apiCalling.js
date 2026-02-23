@@ -1,4 +1,4 @@
-const DOMAIN = 'http://13.210.79.174:5000';
+const DOMAIN = 'http://16.176.136.95:5000';
 
 function serializeQueryString(obj) {
     var str = [];
