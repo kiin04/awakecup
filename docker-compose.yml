@@ -20,7 +20,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - ConnectionStrings__DefaultConnection=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;
+      - App__ConnectionString=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;
       - ASPNETCORE_URLS=http://0.0.0.0:5000
     depends_on:
       - db
