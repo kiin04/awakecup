@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-export const DOMAIN = 'http://16.176.136.95:5000';
+export const DOMAIN = 'http://13.237.21.39:5000';
 
 export function hashToSHA1(string) {
     const shaEncoder = crypto.createHash('sha1');
