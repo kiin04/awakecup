@@ -24,7 +24,7 @@ services:
     volumes:
       - ./appdata:/app/wwwroot/appdata
     environment:
-      - App__ConnectionString=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;CharSet=utf8;
+      - App__ConnectionString=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;CharSet=utf8mb4;
       - ASPNETCORE_URLS=http://0.0.0.0:5000
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
