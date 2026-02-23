@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
     `ID` INT NOT NULL AUTO_INCREMENT,
     `Code` VARCHAR(8) NOT NULL,
-    `ProductTitle` VARCHAR(32) NOT NULL,
+    `ProductTitle` VARCHAR(255) NOT NULL,
     `Description` VARCHAR(1024) NOT NULL DEFAULT 'No Description',
     `CategoryID` INT NOT NULL,
     `Price` INT NOT NULL,
