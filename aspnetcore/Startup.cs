@@ -123,28 +123,37 @@ namespace aspnetcore
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // 1. Static files
             app.UseStaticFiles();
 
-
+            // 2. Swagger
             app.UseSwagger();
-            app.UseSwaggerUI(options => { ... });
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Web store ASP.NET Web APIs");
+                options.RoutePrefix = string.Empty;
+            });
 
             if (env.IsDevelopment())
-         {
-            app.UseDeveloperExceptionPage();
-         }
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
+            // 3. Routing 
             app.UseRouting();
 
-            app.UseCors("OnlyOwnClientOrigin"); 
+            // 4. CORS 
+            app.UseCors("OnlyOwnClientOrigin");
 
+            // 5. Auth
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // 6. Endpoints
             app.UseEndpoints(endpoints =>
-         {
-            endpoints.MapControllers();
-           });
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
