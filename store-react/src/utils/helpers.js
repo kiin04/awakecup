@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export const DOMAIN = 'http://localhost:5000';
+export const DOMAIN = 'http://13.210.79.174:5000';
 
 export function serializeQueryString(obj) {
     var str = [];
