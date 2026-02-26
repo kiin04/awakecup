@@ -27,7 +27,7 @@ The system is architected on **AWS (Amazon Web Services)** with a focus on secur
 * **Database:** Dedicated **Amazon RDS** instance for persistent storage, isolated from the application layer via **VPC Security Groups**.
 * **Jenkins Pipeline:** * **Stage - Build:** Multi-stage Docker builds for Backend (.NET 8) and Frontend (React/Vite).
     * **Stage - Push:** Versioned images are pushed to **Docker Hub**.
-    * **Stage - Deploy:** Automated SSH deployment, environment variable injection, and RDS schema initialization.
+    * **Stage - Deploy:** Environment variable injection and RDS schema initialization.
 
 
 ## 🖼️ Project Gallery
