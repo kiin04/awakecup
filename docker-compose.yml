@@ -1,21 +1,6 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:5.7
-    container_name: awakecup-db
-    restart: always
-    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    environment:
-      MYSQL_DATABASE: awakecup
-      MYSQL_ROOT_PASSWORD: YourPassword123
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./database:/docker-entrypoint-initdb.d
-    networks:
-      - awakecup-network
-
   backend:
     image: ${DOCKER_HUB_USER}/awakecup-backend:latest
     container_name: awakecup-backend-1
@@ -24,11 +9,9 @@ services:
     volumes:
       - ./appdata:/app/wwwroot/appdata
     environment:
-      - App__ConnectionString=Server=db;Database=awakecup;Uid=root;Pwd=YourPassword123;CharSet=utf8mb4;
+      - App__ConnectionString=Server=${DB_HOST};Database=${DB_NAME};Uid=${DB_USER};Pwd=${DB_PASS};CharSet=utf8mb4;
       - ASPNETCORE_URLS=http://0.0.0.0:5000
       - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      - db
     networks:
       - awakecup-network
 

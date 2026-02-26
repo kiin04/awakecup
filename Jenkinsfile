@@ -3,6 +3,10 @@ pipeline {
     environment {
         DOCKER_HUB_USER = "thainv28"
         REGISTRY_CREDS  = "dockerhub-pass"
+        DB_HOST = credentials('AWAKECUP_DB_HOST')
+        DB_USER = credentials('AWAKECUP_DB_USER')
+        DB_PASS = credentials('AWAKECUP_DB_PASS')
+        DB_NAME = "awakecup"
     }
     stages {
         stage('Checkout Source') {
@@ -31,29 +35,27 @@ pipeline {
     }
 }
 
-        stage('Deploy with Compose') {
+        stage('Deploy with RDS') {
             steps {
-        
-                sh "DOCKER_HUB_USER=${DOCKER_HUB_USER} docker-compose down || true"
-                sh "DOCKER_HUB_USER=${DOCKER_HUB_USER} docker-compose up -d --force-recreate"
-            }
-        }
-
-        stage('Init MySQL Database') {
-            steps {
-                script {
-                    echo "Waiting for MySQL to start..."
-                    sh "sleep 20" 
-                    
+              script {
+                 sh """
+                        DB_HOST=${DB_HOST} \
+                        DB_USER=${DB_USER} \
+                        DB_PASS=${DB_PASS} \
+                        DB_NAME=${DB_NAME} \
+                        docker-compose up -d --force-recreate
+                    """
+                  echo "Creating database on AWS RDS..."
                     sh """
-                        docker exec -i awakecup-db mysql -u root -pYourPassword123 -e "SET GLOBAL sql_mode = ''; CREATE DATABASE IF NOT EXISTS awakecup;"
-                        docker exec -i awakecup-db mysql -u root -pYourPassword123 awakecup < './database/table_data.sql'
-                        docker exec -i awakecup-db mysql -u root -pYourPassword123 awakecup < './database/procedure_function.sql'
+                        mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASS} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
+                        mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASS} ${DB_NAME} < './database/table_data.sql'
+                        mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASS} ${DB_NAME} < './database/procedure_function.sql'
                     """
                 }
             }
         }
     }
+} 
     post {
         always {
             sh "docker image prune -f"
