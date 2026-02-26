@@ -34,30 +34,37 @@ pipeline {
             }
         }
 
-        stage('Deploy with RDS') {
+        stage('Deploy & Init RDS') {
             steps {
                 script {
-                    sh """
-                        export DB_HOST=${DB_HOST}
-                        export DB_USER=${DB_USER}
-                        export DB_PASS=${DB_PASS}
-                        export DB_NAME=${DB_NAME}
-                        export DOCKER_HUB_USER=${DOCKER_HUB_USER}
+                    withCredentials([
+                        string(credentialsId: 'AWAKECUP_DB_HOST', variable: 'HOST'),
+                        string(credentialsId: 'AWAKECUP_DB_USER', variable: 'USER'),
+                        string(credentialsId: 'AWAKECUP_DB_PASS', variable: 'PASS')
+                    ]) {
                         
-                        docker-compose down || true
-                        docker-compose up -d --force-recreate
-                    """
-                    
-                    echo "Initializing AWS RDS Database..."
-                    sh """
-                        mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASS} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
-                        mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASS} ${DB_NAME} < './database/table_data.sql'
-                        mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASS} ${DB_NAME} < './database/procedure_function.sql'
-                    """
-                }
-            }
-        }
-    } 
+                        sh '''
+                            export DB_HOST=$HOST
+                            export DB_USER=$USER
+                            export DB_PASS=$PASS
+                            export DB_NAME=awakecup
+                            export DOCKER_HUB_USER=thainv28
+                            
+                            # Deploy app
+                            docker-compose down || true
+                            docker-compose up -d --force-recreate
+                            
+                            # Khởi tạo Database trên RDS
+                            echo "Initializing Database on AWS RDS..."
+                            mysql -h $HOST -u $USER -p"$PASS" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+                            mysql -h $HOST -u $USER -p"$PASS" $DB_NAME < "./database/table_data.sql"
+                            mysql -h $HOST -u $USER -p"$PASS" $DB_NAME < "./database/procedure_function.sql"
+                        '''
+                    }
+                } 
+            } 
+        } 
+    }
 
     post {
         always {
