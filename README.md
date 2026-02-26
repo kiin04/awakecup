@@ -1,73 +1,64 @@
-# Web Store backend with ASP.<i></i>Net Core 3.1
+# ☕ AwakeCup Coffee Store
 
-## Installation
+### 📖 Project Overview
+AwakeCup is a high-performance, scalable coffee e-commerce platform where a premium shopping experience meets modern cloud-native engineering. The core focus extends beyond building a feature-rich store to establishing a sophisticated CI/CD infrastructure on AWS, ensuring that every software update is delivered as fresh, rapid, and reliable as a morning brew.
 
-### Prerequisited
+### 🌟 Key Achievements
+- **Performance Optimization:** Achieved in deployment time by transitioning to an automated Jenkins Pipeline-as-Code and optimizing Docker multi-stage builds.
+- **Full Automation:** Engineered a comprehensive **Jenkins CI/CD pipeline** that automates the entire lifecycle: Source Control → Image Building → Docker Hub Registry → Automated Production Deployment to AWS EC2.
+- **Cloud Database Integration:** Migrated from local containers to **Amazon RDS (MySQL)**, improving data integrity, security, and ensuring zero-data-loss during deployments.
 
-* **ASP.<i></i>NET CORE 3.1**: Đây là ASP.<i></i>NET platform version dùng trong môi trường phát triển và môi trường triển khai
-    * Kiểm tra bằng command `dotnet --info` trong console
-    * Cài đặt ASP.<i></i>NET CORE 3.1 tại https://dotnet.microsoft.com/download nếu chưa cài
-* **Visual Studio Code** và **Visual Studio 2019** IDE dùng để phát triển
-* **MySQL** và **MariaDb**: là DBMS dùng trong dev và deploy. Cả 2 DB đều có độ tương thích cao cho nên có thể dùng thay thế nhau được
+### 🛠 Tech Stack
+<div align="center">
+  <code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/aws.png" alt="AWS" title="AWS"/></code>
+  <code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/_net_core.png" alt=".NET Core" title=".NET Core"/></code>
+  <code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/react.png" alt="React" title="React"/></code>
+  <code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/mysql.png" alt="MySQL" title="MySQL"/></code>
+  <code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/jenkins.png" alt="Jenkins" title="Jenkins"/></code>
+  <code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/docker.png" alt="Docker" title="Docker"/></code>
+  <code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/linux.png" alt="Linux" title="Linux"/></code>
+  <code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/nginx.png" alt="Nginx" title="Nginx"/></code>
+</div>
 
-***!!!NOTE:***
-* Nên cài đặt Visual Studio 2019: chọn workload *ASP.<i></i>NET and web development* như vậy chúng ta vừa sử dụng được VS và cả VSCode. Trong khi nếu cài riêng ASP.<i></i>NET CORE 3.1 ta không thể dùng trong VS.
-* Nên sử dụng MySql trên máy dev vì MySql Workbench nhiều hơn và cũng có thể kết nối với remote db server. Chỉ có điều không thể backup và restore từ Workbench, vì DB trên server là MariaDB.
+### 🏗 DevOps & Cloud Architecture
+The system is architected on **AWS (Amazon Web Services)** with a focus on security and scalability.
 
-### Clone git and first run
-
-1. Sau khi cài đặt môi trường phát triển. Clone source từ git với
-```
-git clone https://github.com/datnt908/awake-cup.git
-```
-
-3.  Để chạy được aspnetcore
-```
-dotnet run
-```
-
-# Web Store frontend with ReactJS
+* **Compute:** **AWS EC2 (Ubuntu)** hosts the containerized applications orchestrated by **Docker Compose**.
+* **Database:** Dedicated **Amazon RDS** instance for persistent storage, isolated from the application layer via **VPC Security Groups**.
+* **Jenkins Pipeline:** * **Stage - Build:** Multi-stage Docker builds for Backend (.NET 8) and Frontend (React/Vite).
+    * **Stage - Push:** Versioned images are pushed to **Docker Hub**.
+    * **Stage - Deploy:** Automated SSH deployment, environment variable injection, and RDS schema initialization.
 
 
-## Installation
+## 🖼️ Project Gallery
 
-### Prerequisited
+<details>
+<summary><b>📱 User Interface </b> (Click to expand)</summary>
+<br>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/98469482-98c4-4550-a816-fe5fc7234d32" width="80%" alt="User Interface" />
+  <br><i>User Interface - Awakecup</i>
+</p>
+</details>
 
-* **NodeJs 12.16.3**: Đây là NodeJs platform version dùng trong môi trường phát triển và môi trường triển khai
-    * Kiểm tra bằng command `node --version` trong console
-    * Cài đặt NodeJs 12.16.3 tại https://nodejs.org/en/ nếu chưa cài
-* **Visual Studio Code** IDE dùng để phát triển
-* **yarn**: chúng tôi sử dụng yarn để cài đặt package
-    * Cài đặt yarn thông qua npm `npm install -g yarn`
 
-***!!!TRICK:*** *Nên cài đặt Node Version Management để có thể dễ dàng cài đặt NodeJS với phiên bản thích hợp và có thể chuyển đổi nhanh phiên bản*
+<details>
+<summary><b>🚀 CI/CD Pipeline </b> (Click to expand)</summary>
+<br>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/aff24d94-9e29-4ac8-a772-86b9d1c078c6" width="80%" alt="Jenkins Pipeline" />
+  <br><i>Automated Jenkins Pipeline with Build & Push Stages</i>
+</p>
+</details>
 
-### Clone git and first run
 
-1. Sau khi cài đặt môi trường phát triển. Clone source từ git với
-```
-git clone https://github.com/datnt908/awake-cup.git
-```
 
-2. Sau khi clone thì cài đặt các package bằng yarn hoặc npm
-```
-cd web-store-reactjs
-yarn install
-```
 
-3.  Run reactjs app với lệnh
-```
-yarn start
-```
-
-# Quy trình làm việc với source code
-
-1. Sau khi nhận được requirement đã đặc tả, tiến hành thiết kế nhằm giải quyết requirement được giao.
-2. Sau khi hoàn chỉnh và chốt bản thiết kế: Developer thực hiện develop theo công việc được phân công trên branch `dev`;
-3. Các Developer phải tạo 1 nhánh mới ở local từ nhành `dev`, và thực hiện code trên đó. Sau khi hoàn thành thì tiến hành merge vào nhánh `dev` chính
-5. Một requirement hoàn chỉnh sẽ được mang sang branch `master` để public trên server.
-
-***Một số lưu ý:***
-* Mỗi một commit phải là commit có khả năng build và run được (không được phép commit lỗi khiến cho cả project không thể build/run)
-* Nội dung commit phải nêu lên được công việc thực hiện trong commit đó
-* Mỗi buổi phải commit lên công việc của mỗi người trong buổi đó
+<details>
+<summary><b>📦 Container Registry (Docker Hub)</b> (Click to expand)</summary>
+<br>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a4d3d8eb-6f36-4ec9-b53d-375728f8f361" width="80%" alt="Docker Hub" />
+  <br><i>Optimized Docker Images in Repository</i>
+</p>
+</details>
